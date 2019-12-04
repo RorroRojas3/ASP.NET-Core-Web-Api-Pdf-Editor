@@ -25,25 +25,35 @@ namespace pdf_editor_api.Controllers
             _pdfEditorService = pdfEditorService;
         }
 
+        /// <summary>
+        ///     Converts Image(s) to a single PDF file
+        /// </summary>
+        /// <returns>Returns PDF file with converted images</returns>
         [HttpPost]
         [Route("ImagesToPdf")]
         public async Task<IActionResult> ImagesToPDF()
         {
             var formFiles = HttpContext.Request.Form.Files;
+            
             if (formFiles.Count <= 0)
             {
-                return null; //new StandardResponse<PdfDocument>(HttpStatusCode.NotAcceptable, "No input file", null);
+                return StatusCode(StatusCodes.Status406NotAcceptable, "No files on request");
             }
-
 
             try
             {
                 var pdf = await _pdfEditorService.ConvertImagesToPDF(formFiles);
+
+                if(pdf == null)
+                {
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "File(s) received are not images");
+                }
+
                 return new FileStreamResult(pdf, "application/pdf");
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                return null; // new StandardResponse<PdfDocument>(HttpStatusCode.InternalServerError, ex.Message, null);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on converting Images to PDF");
             }
         }
     }
