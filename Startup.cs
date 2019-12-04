@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using pdf_editor_api.Service;
 
 namespace pdf_editor_api
 {
@@ -26,6 +27,8 @@ namespace pdf_editor_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc();
+            services.AddSingleton<PDFEditorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
