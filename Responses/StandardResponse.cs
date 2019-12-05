@@ -21,5 +21,15 @@ namespace pdf_editor_api.Responses
         public string Message { get; set; }
         public List<T> Data { get; set; }
 
+        public IActionResult Result
+        {
+            get
+            {
+                ObjectResult objectResult = new ObjectResult(new { HttpStatusCode, Message, Data });
+                objectResult.StatusCode = (int)HttpStatusCode;
+                return objectResult;
+            }
+        }
+
     }
 }

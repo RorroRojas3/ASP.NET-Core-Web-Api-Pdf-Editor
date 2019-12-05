@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +56,41 @@ namespace pdf_editor_api.Controllers
             catch(Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error on converting Images to PDF");
+            }
+        }
+
+        /// <summary>
+        ///     Converts PDF to Images and compresses them into a ZIP file
+        /// </summary>
+        /// <param name="formFile"></param>
+        /// <param name="imageFormat"></param>
+        /// <returns>ZIP File</returns>
+        [HttpPost]
+        [Route("PDFToImages/{imageFormat}")]
+        public async Task<IActionResult> PDFToImages(IFormFile formFile, string imageFormat)
+        {
+
+            IFormFile file = HttpContext.Request.Form.Files.FirstOrDefault();
+
+            if (string.IsNullOrEmpty(imageFormat) || file == null)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Missing imageFormat parameter OR PDF file");
+            }
+
+            try
+            {
+                var zipFile = await _pdfEditorService.PDFToImages(file, imageFormat);
+
+                if (zipFile == null)
+                {
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "ImageFormat not acceptable");
+                }
+
+                return new FileContentResult(zipFile, "application/zip") { FileDownloadName = "PDFToImages.zip" };
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on converting PDF to images");
             }
         }
     }
