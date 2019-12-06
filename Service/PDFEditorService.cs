@@ -3,6 +3,7 @@ using Ghostscript.NET.Rasterizer;
 using Microsoft.AspNetCore.Http;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -103,6 +104,32 @@ namespace pdf_editor_api.Service
             archive.Dispose();
 
             return archiveStream.ToArray();
+        }
+
+        /// <summary>
+        ///     Removes pages from PDF
+        /// </summary>
+        /// <returns>Stream with wanted PDF content</returns>
+        public async Task<Stream> RemovePagesFromPDF(IFormFile file, List<int> pages)
+        {
+            // Open PDF file
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            PdfDocument pdfDocument = PdfReader.Open(file.OpenReadStream(), PdfDocumentOpenMode.Import);
+            PdfDocument newPdfDocument = new PdfDocument();
+
+            // Add wanted pages from PDF into new PDF document
+            for(int i = 0; i < pdfDocument.PageCount; i++)
+            {
+                if (!pages.Contains(i + 1))
+                {
+                    newPdfDocument.AddPage(pdfDocument.Pages[i]);
+                }
+            }
+
+            // Create and return stream of new PDF created
+            MemoryStream newPdfStream = new MemoryStream();
+            newPdfDocument.Save(newPdfStream, false);
+            return newPdfStream;
         }
 
         /// <summary>

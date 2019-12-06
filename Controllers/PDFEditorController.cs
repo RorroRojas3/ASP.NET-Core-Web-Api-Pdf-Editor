@@ -93,5 +93,48 @@ namespace pdf_editor_api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error on converting PDF to images");
             }
         }
+
+        /// <summary>
+        ///     Removes pages from PDF
+        /// </summary>
+        /// <param name="pages"></param>
+        /// <returns>PDF with removed pages</returns>
+        [HttpPost]
+        [Route("RemovePages")]
+        public async Task<IActionResult> RemovePages([FromForm] string pages)
+        {
+            IFormFile formFile = HttpContext.Request.Form.Files.FirstOrDefault();
+
+            if (pages.Length == 0 || formFile == null)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, "File not provided OR Pages parameter not in body");
+            }
+
+            try
+            {
+                // Parse string for integers
+                var splitPages = pages.Split(",");
+                List<int> parsedPage = new List<int>();
+
+                // Parse string into integers
+                int currentPage;
+                foreach(var page in splitPages)
+                {
+                    bool isInt = int.TryParse(page, out currentPage);
+                    if (isInt)
+                    {
+                        parsedPage.Add(int.Parse(page));
+                    }   
+                }
+
+                // Get the PDF stream with wanted PDF pages
+                Stream pdfStream = await _pdfEditorService.RemovePagesFromPDF(formFile, parsedPage);
+                return new FileStreamResult(pdfStream, "application/pdf");
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error on removing pages from PDF");
+            }
+        }
     }
 }
