@@ -133,6 +133,31 @@ namespace pdf_editor_api.Service
         }
 
         /// <summary>
+        ///     Goes through each PDF and extracts all pages from it
+        ///     and puts it into a single PDF document
+        /// </summary>
+        /// <param name="formFiles"></param>
+        /// <returns>Merge PDF stream</returns>
+        public async Task<Stream> MergePDF(IFormFileCollection formFiles)
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            PdfDocument pdfDocument = new PdfDocument();
+            MemoryStream pdfStream = new MemoryStream();
+
+            foreach(var file in formFiles)
+            {
+                PdfDocument tempPdf = PdfReader.Open(file.OpenReadStream(), PdfDocumentOpenMode.Import);
+                for(var i = 0; i < tempPdf.PageCount; i++)
+                {
+                    pdfDocument.AddPage(tempPdf.Pages[i]);
+                }
+            }
+
+            pdfDocument.Save(pdfStream, false);
+            return pdfStream;
+        }
+
+        /// <summary>
         ///     Determines if file is an image
         /// </summary>
         /// <param name="file"></param>

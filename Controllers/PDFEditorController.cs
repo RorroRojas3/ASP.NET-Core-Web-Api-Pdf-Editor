@@ -136,5 +136,32 @@ namespace pdf_editor_api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error on removing pages from PDF");
             }
         }
+
+
+        /// <summary>
+        ///     Merged PDF
+        /// </summary>
+        /// <returns>Merge PDF file</returns>
+        [HttpPost]
+        [Route("MergePDF")]
+        public async Task<IActionResult> MergePDF()
+        {
+            IFormFileCollection formFiles = HttpContext.Request.Form.Files;
+
+            if (formFiles.Count <= 0)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, "No files sent");
+            }
+
+            try
+            {
+                Stream pdf = await _pdfEditorService.MergePDF(formFiles);
+                return new FileStreamResult(pdf, "application/pdf");
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error merging PDFs");
+            }
+        }
     }
 }
