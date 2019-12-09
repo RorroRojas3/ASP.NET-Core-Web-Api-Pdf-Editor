@@ -53,9 +53,9 @@ namespace pdf_editor_api.Controllers
 
                 return new FileStreamResult(pdf, "application/pdf");
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error on converting Images to PDF");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -90,7 +90,7 @@ namespace pdf_editor_api.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error on converting PDF to images");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -133,7 +133,7 @@ namespace pdf_editor_api.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error on removing pages from PDF");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -160,7 +160,7 @@ namespace pdf_editor_api.Controllers
             }
             catch(Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error merging PDFs");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }
