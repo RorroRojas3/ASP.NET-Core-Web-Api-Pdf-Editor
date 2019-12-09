@@ -163,5 +163,34 @@ namespace pdf_editor_api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("SplitPDF/ByRange/{range}")]
+        public async Task<IActionResult> SplitPDFByRange(string range)
+        {
+            IFormFile formFile = HttpContext.Request.Form.Files.FirstOrDefault();
+
+            if (formFile == null || string.IsNullOrEmpty(range))
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, "No file OR range sent"); 
+            }
+
+            try
+            {
+                var zipFile = await _pdfEditorService.SplitPDFByRange(formFile, range);
+
+                if (zipFile == null)
+                {
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "ImageFormat not acceptable");
+                }
+
+                return new FileContentResult(zipFile, "application/zip") { FileDownloadName = "PDFSplitByRange.zip" };
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
     }
 }

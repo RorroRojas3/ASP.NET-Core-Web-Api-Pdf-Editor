@@ -157,6 +157,44 @@ namespace pdf_editor_api.Service
             return pdfStream;
         }
 
+        public async Task<byte[]> SplitPDFByRange(IFormFile formFile, string range)
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            PdfDocument pdfDocument = PdfReader.Open(formFile.OpenReadStream(), PdfDocumentOpenMode.Import);
+
+            // Converts PDF pages into images and compresses them into a ZIP file
+            var archiveStream = new MemoryStream();
+            var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, true);
+
+            int k = 0;
+            int totalRange;
+            bool rangeParsed = int.TryParse(range, out totalRange);
+
+            if (!rangeParsed)
+            {
+                return null;
+            }
+            
+            for (var i = 1; i <= pdfDocument.PageCount / totalRange; i++)
+            {
+                PdfDocument newPdf = new PdfDocument();
+                MemoryStream tempPdfStream = new MemoryStream();
+                for (var j = k; j < (i * totalRange); j++)
+                {
+                    newPdf.AddPage(pdfDocument.Pages[j]);
+                }
+                var zipArchiveEntry = archive.CreateEntry($"PDF-Range-{i}.pdf", CompressionLevel.Optimal);
+                var zipStream = zipArchiveEntry.Open();
+                newPdf.Save(tempPdfStream);
+                byte[] newPdfBytes = tempPdfStream.ToArray();
+                await zipStream.WriteAsync(newPdfBytes, 0, newPdfBytes.Length);
+                zipStream.Close();
+                k = i * totalRange;
+            }
+
+            return archiveStream.ToArray();
+        }
+
         /// <summary>
         ///     Determines if file is an image
         /// </summary>
