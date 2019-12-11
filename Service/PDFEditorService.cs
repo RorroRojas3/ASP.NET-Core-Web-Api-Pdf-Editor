@@ -157,6 +157,12 @@ namespace pdf_editor_api.Service
             return pdfStream;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formFile"></param>
+        /// <param name="range"></param>
+        /// <returns></returns>
         public async Task<byte[]> SplitPDFByRange(IFormFile formFile, string range)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -192,6 +198,7 @@ namespace pdf_editor_api.Service
                 k = i * totalRange;
             }
 
+            archive.Dispose();
             return archiveStream.ToArray();
         }
 
