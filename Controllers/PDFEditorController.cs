@@ -35,7 +35,7 @@ namespace pdf_editor_api.Controllers
         [Route("ImagesToPdf")]
         public async Task<IActionResult> ImagesToPDF()
         {
-            var formFiles = HttpContext.Request.Form.Files;
+            var formFiles = HttpContext.Request.Form?.Files;
             
             if (formFiles.Count <= 0)
             {
@@ -70,7 +70,7 @@ namespace pdf_editor_api.Controllers
         public async Task<IActionResult> PDFToImages(IFormFile formFile, string imageFormat)
         {
 
-            IFormFile file = HttpContext.Request.Form.Files.FirstOrDefault();
+            IFormFile file = HttpContext.Request.Form?.Files.FirstOrDefault();
 
             if (string.IsNullOrEmpty(imageFormat) || file == null)
             {
@@ -103,7 +103,7 @@ namespace pdf_editor_api.Controllers
         [Route("RemovePages")]
         public async Task<IActionResult> RemovePages([FromForm] string pages)
         {
-            IFormFile formFile = HttpContext.Request.Form.Files.FirstOrDefault();
+            IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
 
             if (pages.Length == 0 || formFile == null)
             {
@@ -146,7 +146,7 @@ namespace pdf_editor_api.Controllers
         [Route("MergePDF")]
         public async Task<IActionResult> MergePDF()
         {
-            IFormFileCollection formFiles = HttpContext.Request.Form.Files;
+            IFormFileCollection formFiles = HttpContext.Request.Form?.Files;
 
             if (formFiles.Count <= 0)
             {
@@ -164,11 +164,16 @@ namespace pdf_editor_api.Controllers
             }
         }
 
+        /// <summary>
+        ///     Splits PDF by fixed range
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SplitPDF/ByRange/{range}")]
         public async Task<IActionResult> SplitPDFByRange(string range)
         {
-            IFormFile formFile = HttpContext.Request.Form.Files.FirstOrDefault();
+            IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
 
             if (formFile == null || string.IsNullOrEmpty(range))
             {

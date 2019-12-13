@@ -158,13 +158,16 @@ namespace pdf_editor_api.Service
         }
 
         /// <summary>
-        /// 
+        ///     Splits PDF in fixed ranges.
+        ///     If there are remaining pages based on the fixed split
+        ///     they will be stored in last PDF file on ZIP
         /// </summary>
         /// <param name="formFile"></param>
         /// <param name="range"></param>
-        /// <returns></returns>
+        /// <returns>Byte array with ZIP file containing PDFs</returns>
         public async Task<byte[]> SplitPDFByRange(IFormFile formFile, string range)
         {
+            // Register encoding and open PDF file
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             PdfDocument pdfDocument = PdfReader.Open(formFile.OpenReadStream(), PdfDocumentOpenMode.Import);
 
@@ -172,30 +175,40 @@ namespace pdf_editor_api.Service
             var archiveStream = new MemoryStream();
             var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, true);
 
-            int k = 0;
+            // Checks if input is a valid integer
             int totalRange;
             bool rangeParsed = int.TryParse(range, out totalRange);
-
             if (!rangeParsed)
             {
                 return null;
             }
-            
-            for (var i = 1; i <= pdfDocument.PageCount / totalRange; i++)
+
+            // Splits the PDF by range
+            int j = 0;
+            for (var i = 0; i <= pdfDocument.PageCount / totalRange; i++)
             {
                 PdfDocument newPdf = new PdfDocument();
                 MemoryStream tempPdfStream = new MemoryStream();
-                for (var j = k; j < (i * totalRange); j++)
+                for(var k = 0; k < totalRange; k++)
                 {
-                    newPdf.AddPage(pdfDocument.Pages[j]);
+                    if (j < pdfDocument.PageCount)
+                    {
+                        newPdf.AddPage(pdfDocument.Pages[j]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                    j++;
                 }
+                
+                // Creates ZIP file and stores PDF splitted into new PDF files
                 var zipArchiveEntry = archive.CreateEntry($"PDF-Range-{i}.pdf", CompressionLevel.Optimal);
                 var zipStream = zipArchiveEntry.Open();
                 newPdf.Save(tempPdfStream);
                 byte[] newPdfBytes = tempPdfStream.ToArray();
                 await zipStream.WriteAsync(newPdfBytes, 0, newPdfBytes.Length);
                 zipStream.Close();
-                k = i * totalRange;
             }
 
             archive.Dispose();
