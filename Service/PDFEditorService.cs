@@ -216,6 +216,45 @@ namespace pdf_editor_api.Service
         }
 
         /// <summary>
+        ///     Splits PDF and creates new PDF with selected range
+        /// </summary>
+        /// <param name="formFile"></param>
+        /// <param name="range"></param>
+        /// <returns>Stream of selected pages of Pdf</returns>
+        public async Task<Stream> SplitPDFByCustomRange(IFormFile formFile, string range)
+        {
+            // Register encoding and open PDF file
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            PdfDocument pdfDocument = PdfReader.Open(formFile.OpenReadStream(), PdfDocumentOpenMode.Import);
+
+            // Get starting and ending page
+            string[] rangeSplitted = range.Split("-");
+
+            // Checks if inputs are valid integers
+            int startPage;
+            int lastPage;
+            bool isStartPage = int.TryParse(rangeSplitted[0], out startPage);
+            bool isLastPage = int.TryParse(rangeSplitted[1], out lastPage);
+            if (!isStartPage || !isLastPage)
+            {
+                return null;
+            }
+
+            // Create new PDF document
+            PdfDocument newPdf = new PdfDocument();
+            MemoryStream newPdfStream = new MemoryStream();
+            startPage -= 1;
+            lastPage -= 1;
+            for (var i = startPage; i <= lastPage; i++)
+            {
+                newPdf.AddPage(pdfDocument.Pages[i]);
+            }
+
+            newPdf.Save(newPdfStream, false);
+            return newPdfStream;
+        }
+
+        /// <summary>
         ///     Determines if file is an image
         /// </summary>
         /// <param name="file"></param>
