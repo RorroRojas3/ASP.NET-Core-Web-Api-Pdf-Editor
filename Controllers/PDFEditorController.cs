@@ -17,7 +17,7 @@ using PdfSharp.Pdf;
 namespace pdf_editor_api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/")]
     public class PDFEditorController : Controller
     {
         private readonly PDFEditorService _pdfEditorService;
@@ -170,7 +170,7 @@ namespace pdf_editor_api.Controllers
         /// <param name="range"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("SplitPDF/ByRange/{range}")]
+        [Route("SplitPDF/FixRange/{range}")]
         public async Task<IActionResult> SplitPDFByRange(string range)
         {
             IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
@@ -192,6 +192,33 @@ namespace pdf_editor_api.Controllers
                 return new FileContentResult(zipFile, "application/zip") { FileDownloadName = "PDFSplitByRange.zip" };
             }
             catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        
+        /// <summary>
+        ///     Splits Pdf into custom range sent
+        /// </summary>
+        /// <param name="range"></param>
+        /// <returns>New Pdf with custom range</returns>
+        [HttpPost]
+        [Route("SplitPDF/CustomRange")]
+        public async Task<IActionResult> SplitPDFByCustomRange([FromForm] string range)
+        {
+            IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
+
+            if (formFile == null || string.IsNullOrEmpty(range))
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, "No file OR range sent");
+            }
+
+            try
+            {
+                Stream pdf = await _pdfEditorService.SplitPDFByCustomRange(formFile, range);
+                return new FileStreamResult(pdf, "application/pdf");
+            }
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
