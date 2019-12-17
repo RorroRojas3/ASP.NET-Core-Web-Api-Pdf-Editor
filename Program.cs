@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
+using Serilog;
 
 namespace pdf_editor_api
 {
@@ -18,9 +20,15 @@ namespace pdf_editor_api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(builder => 
+                {
+                    builder.AddApplicationInsights("c6a5c112-2b7b-4aba-98ee-b018bc53e3f8");
+                    builder.AddFilter<ApplicationInsightsLoggerProvider> ("", LogLevel.Information);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+                
     }
 }

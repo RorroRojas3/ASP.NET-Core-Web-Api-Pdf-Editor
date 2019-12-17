@@ -21,10 +21,13 @@ namespace pdf_editor_api.Controllers
     public class PDFEditorController : Controller
     {
         private readonly PDFEditorService _pdfEditorService;
+        private readonly ILogger _logger;
 
-        public PDFEditorController(PDFEditorService pdfEditorService)
+        public PDFEditorController(PDFEditorService pdfEditorService,
+                                    ILogger<PDFEditorController> logger)
         {
             _pdfEditorService = pdfEditorService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -35,6 +38,8 @@ namespace pdf_editor_api.Controllers
         [Route("ImagesToPdf")]
         public async Task<IActionResult> ImagesToPDF()
         {
+            _logger.LogInformation("ImagesToPdf started");
+
             var formFiles = HttpContext.Request.Form?.Files;
             
             if (formFiles.Count <= 0)
@@ -44,13 +49,16 @@ namespace pdf_editor_api.Controllers
 
             try
             {
+                _logger.LogInformation("ImagesToPdf ConverToImages called");
                 var pdf = await _pdfEditorService.ConvertImagesToPDF(formFiles);
 
                 if(pdf == null)
                 {
+                    _logger.LogInformation("File(s) received are not images");
                     return StatusCode(StatusCodes.Status406NotAcceptable, "File(s) received are not images");
                 }
 
+                _logger.LogInformation("Images converted to PDF file");
                 return new FileStreamResult(pdf, "application/pdf");
             }
             catch(Exception ex)
