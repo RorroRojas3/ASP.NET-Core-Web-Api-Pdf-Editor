@@ -24,7 +24,7 @@ namespace pdf_editor_api.Service
         private static string[] _imagesExtensions = { ".jpg", ".png", ".gif", ".tiff", ".bpm" };
         private readonly ILogger _logger;
 
-        public PDFEditorService(Ilogger logger)
+        public PDFEditorService(ILogger logger)
         {
             _logger = logger;
         }
