@@ -37,6 +37,7 @@ namespace pdf_editor_api
 
             services.AddControllers();
             services.AddMvc();
+            services.AddCors();
             services.AddSingleton<PDFEditorService>();
             services.AddApplicationInsightsTelemetry();
             services.AddSingleton(Log.Logger);
@@ -55,6 +56,8 @@ namespace pdf_editor_api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
