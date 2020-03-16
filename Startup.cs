@@ -37,7 +37,12 @@ namespace pdf_editor_api
 
             services.AddControllers();
             services.AddMvc();
-            services.AddCors(x => x.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin()));
+            services.AddCors(x => x.AddPolicy("CORSPolicy",
+                options => {
+                    options.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                ;}));
             services.AddSingleton<PDFEditorService>();
             services.AddApplicationInsightsTelemetry();
             services.AddSingleton(Log.Logger);
@@ -57,7 +62,7 @@ namespace pdf_editor_api
 
             app.UseAuthorization();
 
-            app.UseCors(x => x.AllowAnyOrigin());
+            app.UseCors("CORSPolicy");
 
             app.UseEndpoints(endpoints =>
             {
