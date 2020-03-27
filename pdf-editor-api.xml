@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>pdf-editor-api</name>
+    </assembly>
+    <members>
+        <member name="T:pdf_editor_api.Controllers.PDFEditorController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:pdf_editor_api.Controllers.PDFEditorController._pdfEditorService">
+            <summary>
+                Private variables 
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.#ctor(pdf_editor_api.Service.PDFEditorService,Serilog.ILogger)">
+            <summary>
+                Constructor for PdfEditorController with DI
+            </summary>
+            <param name="pdfEditorService"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.ImagesToPDF">
+            <summary>
+                Converts Image(s) to a single PDF file
+            </summary>
+            <returns>Returns PDF file with converted images</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.PdfToImages(System.String)">
+            <summary>
+                Converts PDF to Images and compresses them into a ZIP file
+            </summary>
+            <param name="formFile"></param>
+            <param name="imageFormat"></param>
+            <returns>ZIP File</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.RemovePages(System.String)">
+            <summary>
+                Removes pages from PDF
+            </summary>
+            <param name="pages"></param>
+            <returns>PDF with removed pages</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.MergePDF">
+            <summary>
+                Merged PDF
+            </summary>
+            <returns>Merge PDF file</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByRange(System.String)">
+            <summary>
+                Splits PDF by fixed range
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByCustomRange(System.String)">
+            <summary>
+                Splits Pdf into custom range sent
+            </summary>
+            <param name="range"></param>
+            <returns>New Pdf with custom range</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.ConvertImagesToPDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+                Converts Image(s) to PDF document
+            </summary>
+            <param name="formFiles"></param>
+            <returns>PDF document stream</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.PDFToImages(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Converts PDF to Images and compresses them into a ZIP file
+            </summary>
+            <param name="formFile"></param>
+            <param name="imageFormat"></param>
+            <returns>Array of bytes of ZIP file</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.RemovePagesFromPDF(Microsoft.AspNetCore.Http.IFormFile,System.Collections.Generic.List{System.Int32})">
+            <summary>
+                Removes pages from PDF
+            </summary>
+            <returns>Stream with wanted PDF content</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.MergePDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+                Goes through each PDF and extracts all pages from it
+                and puts it into a single PDF document
+            </summary>
+            <param name="formFiles"></param>
+            <returns>Merge PDF stream</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.SplitPDFByRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Splits PDF in fixed ranges.
+                If there are remaining pages based on the fixed split
+                they will be stored in last PDF file on ZIP
+            </summary>
+            <param name="formFile"></param>
+            <param name="range"></param>
+            <returns>Byte array with ZIP file containing PDFs</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.SplitPDFByCustomRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Splits PDF and creates new PDF with selected range
+            </summary>
+            <param name="formFile"></param>
+            <param name="range"></param>
+            <returns>Stream of selected pages of Pdf</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.IsFileAnImage(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+                Determines if file is an image
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pdf_editor_api.Startup.RegisterSwashbuckle(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                Register Swashbuckle UI
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>
