@@ -41,17 +41,11 @@ namespace pdf_editor_api.Controllers
         /// <returns>Returns PDF file with converted images</returns>
         [HttpPost]
         [Route("ImagesToPdf")]
-        public async Task<IActionResult> ImagesToPDF()
+        public async Task<IActionResult> ImagesToPDF(IFormFileCollection files)
         {
             try
             {
                 _logger.Information("ImagesToPdf started");
-
-                if (HttpContext.Request.Form == null)
-                {
-                    _logger.Information("ImagesToPdf Form is null");
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "No files on request");
-                }
 
                 var formFiles = HttpContext.Request?.Form?.Files;
 
@@ -87,17 +81,11 @@ namespace pdf_editor_api.Controllers
         /// <returns>ZIP File</returns>
         [HttpPost]
         [Route("PdfToImages/{imageFormat}")]
-        public async Task<IActionResult> PdfToImages(string imageFormat)
+        public async Task<IActionResult> PdfToImages(IFormFile formFile, string imageFormat)
         {         
             try
             {
                 _logger.Information("PdfToImages started");
-
-                if (HttpContext.Request.Form == null)
-                {
-                    _logger.Information("PdfToImages - Form is null");
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
-                }
 
                 IFormFile file = HttpContext.Request?.Form?.Files.FirstOrDefault();
 
@@ -132,17 +120,11 @@ namespace pdf_editor_api.Controllers
         /// <returns>PDF with removed pages</returns>
         [HttpPost]
         [Route("RemovePages/{pages}")]
-        public async Task<IActionResult> RemovePages(string pages)
+        public async Task<IActionResult> RemovePages(IFormFile file, string pages)
         {
             try
             {
                 _logger.Information("RemovePages started");
-
-                if (HttpContext.Request.Form == null)
-                {
-                    _logger.Information("RemovePages - Missing form file");
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
-                }
 
                 IFormFile formFile = HttpContext.Request?.Form?.Files.FirstOrDefault();
 
@@ -186,17 +168,11 @@ namespace pdf_editor_api.Controllers
         /// <returns>Merge PDF file</returns>
         [HttpPost]
         [Route("Merge")]
-        public async Task<IActionResult> MergePDF()
+        public async Task<IActionResult> MergePDF(IFormFileCollection files)
         {
             try
             {
                 _logger.Information("MergePdf started");
-
-                if (HttpContext.Request.Form == null)
-                {
-                    _logger.Information("MergePdf - Missing form files");
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form files");
-                }
 
                 IFormFileCollection formFiles = HttpContext.Request?.Form?.Files;
 
@@ -224,17 +200,11 @@ namespace pdf_editor_api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Split/FixRange/{range}")]
-        public async Task<IActionResult> SplitPdfByRange(string range)
+        public async Task<IActionResult> SplitPdfByRange(string range, IFormFile file)
         {
             try
             {
                 _logger.Information("SplitPdfByRange started");
-
-                if (HttpContext.Request.Form == null)
-                {
-                    _logger.Information("SplitPdf - FixRange - Missing form file");
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
-                }
 
                 IFormFile formFile = HttpContext.Request?.Form?.Files.FirstOrDefault();
 
@@ -269,17 +239,11 @@ namespace pdf_editor_api.Controllers
         /// <returns>New Pdf with custom range</returns>
         [HttpPost]
         [Route("Split/CustomRange/{range}")]
-        public async Task<IActionResult> SplitPdfByCustomRange(string range)
+        public async Task<IActionResult> SplitPdfByCustomRange(IFormFile file, string range)
         {
             try
             {
                 _logger.Information("SplitPdf/CustomerRange started");
-
-                if (HttpContext.Request.Form == null)
-                {
-                    _logger.Information("SplitPdf - CustomRange - Missing form file");
-                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
-                }
 
                 IFormFile formFile = HttpContext.Request?.Form?.Files.FirstOrDefault();
 

@@ -220,6 +220,11 @@ namespace pdf_editor_api.Service
                     }
                     j++;
                 }
+
+                if (j == pdfDocument.PageCount)
+                {
+                    break;
+                }
                 
                 // Creates ZIP file and stores PDF splitted into new PDF files
                 var zipArchiveEntry = archive.CreateEntry($"PDF-Range-{i}.pdf", CompressionLevel.Optimal);

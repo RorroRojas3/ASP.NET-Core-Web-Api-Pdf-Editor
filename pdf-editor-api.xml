@@ -21,13 +21,13 @@
             <param name="pdfEditorService"></param>
             <param name="logger"></param>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.ImagesToPDF">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.ImagesToPDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
             <summary>
                 Converts Image(s) to a single PDF file
             </summary>
             <returns>Returns PDF file with converted images</returns>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.PdfToImages(System.String)">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.PdfToImages(Microsoft.AspNetCore.Http.IFormFile,System.String)">
             <summary>
                 Converts PDF to Images and compresses them into a ZIP file
             </summary>
@@ -35,27 +35,27 @@
             <param name="imageFormat"></param>
             <returns>ZIP File</returns>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.RemovePages(System.String)">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.RemovePages(Microsoft.AspNetCore.Http.IFormFile,System.String)">
             <summary>
                 Removes pages from PDF
             </summary>
             <param name="pages"></param>
             <returns>PDF with removed pages</returns>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.MergePDF">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.MergePDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
             <summary>
                 Merged PDF
             </summary>
             <returns>Merge PDF file</returns>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByRange(System.String)">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByRange(System.String,Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
                 Splits PDF by fixed range
             </summary>
             <param name="range"></param>
             <returns></returns>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByCustomRange(System.String)">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByCustomRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
             <summary>
                 Splits Pdf into custom range sent
             </summary>
