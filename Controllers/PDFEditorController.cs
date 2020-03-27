@@ -43,17 +43,23 @@ namespace pdf_editor_api.Controllers
         [Route("ImagesToPdf")]
         public async Task<IActionResult> ImagesToPDF()
         {
-            _logger.Information("ImagesToPdf started");
-
-            var formFiles = HttpContext.Request.Form?.Files;
-            
-            if (formFiles.Count <= 0)
-            {
-                return StatusCode(StatusCodes.Status406NotAcceptable, "No files on request");
-            }
-
             try
             {
+                _logger.Information("ImagesToPdf started");
+
+                if (HttpContext.Request.Form == null)
+                {
+                    _logger.Information("ImagesToPdf Form is null");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "No files on request");
+                }
+
+                var formFiles = HttpContext.Request?.Form?.Files;
+
+                if (formFiles == null || formFiles.Count <= 0)
+                {
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "No files on request");
+                }
+
                 _logger.Information("ImagesToPdf ConverToImages called");
                 var pdf = await _pdfEditorService.ConvertImagesToPDF(formFiles);
 
@@ -82,18 +88,25 @@ namespace pdf_editor_api.Controllers
         [HttpPost]
         [Route("PdfToImages/{imageFormat}")]
         public async Task<IActionResult> PdfToImages(string imageFormat)
-        {
-            _logger.Information("PdfToImages started");
-            IFormFile file = HttpContext.Request.Form?.Files.FirstOrDefault();
-
-            if (string.IsNullOrEmpty(imageFormat) || file == null)
-            {
-                _logger.Information("PdfToImages - not all parameters given");
-                return StatusCode(StatusCodes.Status406NotAcceptable, "Missing imageFormat parameter OR PDF file");
-            }
-
+        {         
             try
             {
+                _logger.Information("PdfToImages started");
+
+                if (HttpContext.Request.Form == null)
+                {
+                    _logger.Information("PdfToImages - Form is null");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
+                }
+
+                IFormFile file = HttpContext.Request?.Form?.Files.FirstOrDefault();
+
+                if (string.IsNullOrEmpty(imageFormat) || file == null)
+                {
+                    _logger.Information("PdfToImages - not all parameters given");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing imageFormat parameter OR PDF file");
+                }
+
                 var zipFile = await _pdfEditorService.PDFToImages(file, imageFormat);
 
                 if (zipFile == null)
@@ -107,7 +120,7 @@ namespace pdf_editor_api.Controllers
             }
             catch(Exception ex)
             {
-                _logger.Error($"ImagesToPdf - Error: {ex.Message}");
+                _logger.Error($"PdfToImages - Error: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -121,17 +134,24 @@ namespace pdf_editor_api.Controllers
         [Route("RemovePages/{pages}")]
         public async Task<IActionResult> RemovePages(string pages)
         {
-            _logger.Information("RemovePages started");
-            IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
-
-            if (pages.Length == 0 || formFile == null)
-            {
-                _logger.Information("RemovePages - not all parameters given");
-                return StatusCode(StatusCodes.Status406NotAcceptable, "File not provided OR Pages parameter not in body");
-            }
-
             try
             {
+                _logger.Information("RemovePages started");
+
+                if (HttpContext.Request.Form == null)
+                {
+                    _logger.Information("RemovePages - Missing form file");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
+                }
+
+                IFormFile formFile = HttpContext.Request?.Form?.Files.FirstOrDefault();
+
+                if (pages.Length == 0 || formFile == null)
+                {
+                    _logger.Information("RemovePages - not all parameters given");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "File not provided OR Pages parameter not in body");
+                }
+
                 // Parse string for integers
                 var splitPages = pages.Split(",");
                 List<int> parsedPage = new List<int>();
@@ -168,17 +188,24 @@ namespace pdf_editor_api.Controllers
         [Route("Merge")]
         public async Task<IActionResult> MergePDF()
         {
-            _logger.Information("MergePdf started");
-            IFormFileCollection formFiles = HttpContext.Request.Form?.Files;
-
-            if (formFiles.Count <= 0)
-            {
-                _logger.Information("MergePdf - not all parameters given");
-                return StatusCode(StatusCodes.Status406NotAcceptable, "No files sent");
-            }
-
             try
             {
+                _logger.Information("MergePdf started");
+
+                if (HttpContext.Request.Form == null)
+                {
+                    _logger.Information("MergePdf - Missing form files");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form files");
+                }
+
+                IFormFileCollection formFiles = HttpContext.Request?.Form?.Files;
+
+                if (formFiles == null || formFiles.Count <= 0)
+                {
+                    _logger.Information("MergePdf - not all parameters given");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "No files sent");
+                }
+
                 Stream pdf = await _pdfEditorService.MergePDF(formFiles);
                 _logger.Information("MergePdf - Pdfs succesfully merged");
                 return new FileStreamResult(pdf, "application/pdf");
@@ -199,31 +226,38 @@ namespace pdf_editor_api.Controllers
         [Route("Split/FixRange/{range}")]
         public async Task<IActionResult> SplitPdfByRange(string range)
         {
-            _logger.Information("SplitPdfByRange started");
-            IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
-
-            if (formFile == null || string.IsNullOrEmpty(range))
-            {
-                _logger.Information("SplitPdfByRange - not all parameters given");
-                return StatusCode(StatusCodes.Status406NotAcceptable, "No file OR range sent"); 
-            }
-
             try
             {
+                _logger.Information("SplitPdfByRange started");
+
+                if (HttpContext.Request.Form == null)
+                {
+                    _logger.Information("SplitPdf - FixRange - Missing form file");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
+                }
+
+                IFormFile formFile = HttpContext.Request?.Form?.Files.FirstOrDefault();
+
+                if (formFile == null || string.IsNullOrEmpty(range))
+                {
+                    _logger.Information("SplitPdf - FixRange - not all parameters given");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "No file OR range sent");
+                }
+
                 var zipFile = await _pdfEditorService.SplitPDFByRange(formFile, range);
 
                 if (zipFile == null)
                 {
-                    _logger.Information("SplitPdfByRange - Information not acceptable");
+                    _logger.Information("SplitPdf - FixRange - Information not acceptable");
                     return StatusCode(StatusCodes.Status406NotAcceptable, "Infomation not acceptable");
                 }
 
-                _logger.Information("SplitPdfByRange - Succesfully splitted Pdf");
+                _logger.Information("SplitPdf - FixRange - Succesfully splitted Pdf");
                 return new FileContentResult(zipFile, "application/zip") { FileDownloadName = "PDFSplitByRange.zip" };
             }
             catch(Exception ex)
             {
-                _logger.Error($"SplitPdfByRange - Error: {ex.Message}");
+                _logger.Error($"SplitPdf - FixRange - Error: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
@@ -237,31 +271,38 @@ namespace pdf_editor_api.Controllers
         [Route("Split/CustomRange/{range}")]
         public async Task<IActionResult> SplitPdfByCustomRange(string range)
         {
-            _logger.Information("SplitPdf/CustomerRange started");
-            IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
-
-            if (formFile == null || string.IsNullOrEmpty(range))
-            {
-                _logger.Information("Not all parameters given");
-                return StatusCode(StatusCodes.Status406NotAcceptable, "No file OR range sent");
-            }
-
             try
             {
+                _logger.Information("SplitPdf/CustomerRange started");
+
+                if (HttpContext.Request.Form == null)
+                {
+                    _logger.Information("SplitPdf - CustomRange - Missing form file");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "Missing form file");
+                }
+
+                IFormFile formFile = HttpContext.Request?.Form?.Files.FirstOrDefault();
+
+                if (formFile == null || string.IsNullOrEmpty(range))
+                {
+                    _logger.Information("SplitPdf - CustomRange - Not all parameters given");
+                    return StatusCode(StatusCodes.Status406NotAcceptable, "No file OR range sent");
+                }
+
                 Stream pdf = await _pdfEditorService.SplitPDFByCustomRange(formFile, range);
 
                 if (pdf == null)
                 {
-                    _logger.Information("SplitPdfByRange - Ranges not acceptable");
+                    _logger.Information("SplitPdf - CustomRange - Ranges not acceptable");
                     return StatusCode(StatusCodes.Status406NotAcceptable, "Infomation not acceptable");
                 }
 
-                _logger.Information("SplitPdf/CustomRange - Succesfully splitted Pdf");
+                _logger.Information("SplitPdf - CustomRange - Succesfully splitted Pdf");
                 return new FileStreamResult(pdf, "application/pdf");
             }
             catch (Exception ex)
             {
-                _logger.Error($"SplitPdf/CustomRange - Error: {ex.Message}");
+                _logger.Error($"SplitPdf - CustomRange - Error: {ex.Message}");
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
