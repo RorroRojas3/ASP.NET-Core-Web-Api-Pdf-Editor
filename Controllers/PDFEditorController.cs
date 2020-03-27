@@ -10,13 +10,24 @@ using Serilog;
 
 namespace pdf_editor_api.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiController]
-    [Route("api/")]
+    [Route("api/Pdf/")]
     public class PDFEditorController : Controller
     {
+        /// <summary>
+        ///     Private variables 
+        /// </summary>
         private readonly PDFEditorService _pdfEditorService;
         private readonly ILogger _logger;
 
+        /// <summary>
+        ///     Constructor for PdfEditorController with DI
+        /// </summary>
+        /// <param name="pdfEditorService"></param>
+        /// <param name="logger"></param>
         public PDFEditorController(PDFEditorService pdfEditorService,
                                     ILogger logger)
         {
@@ -69,8 +80,8 @@ namespace pdf_editor_api.Controllers
         /// <param name="imageFormat"></param>
         /// <returns>ZIP File</returns>
         [HttpPost]
-        [Route("PDFToImages/{imageFormat}")]
-        public async Task<IActionResult> PDFToImages(IFormFile formFile, string imageFormat)
+        [Route("PdfToImages/{imageFormat}")]
+        public async Task<IActionResult> PdfToImages(string imageFormat)
         {
             _logger.Information("PdfToImages started");
             IFormFile file = HttpContext.Request.Form?.Files.FirstOrDefault();
@@ -107,8 +118,8 @@ namespace pdf_editor_api.Controllers
         /// <param name="pages"></param>
         /// <returns>PDF with removed pages</returns>
         [HttpPost]
-        [Route("RemovePages")]
-        public async Task<IActionResult> RemovePages([FromForm] string pages)
+        [Route("RemovePages/{pages}")]
+        public async Task<IActionResult> RemovePages(string pages)
         {
             _logger.Information("RemovePages started");
             IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
@@ -154,7 +165,7 @@ namespace pdf_editor_api.Controllers
         /// </summary>
         /// <returns>Merge PDF file</returns>
         [HttpPost]
-        [Route("MergePDF")]
+        [Route("Merge")]
         public async Task<IActionResult> MergePDF()
         {
             _logger.Information("MergePdf started");
@@ -185,8 +196,8 @@ namespace pdf_editor_api.Controllers
         /// <param name="range"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("SplitPDF/FixRange/{range}")]
-        public async Task<IActionResult> SplitPDFByRange(string range)
+        [Route("Split/FixRange/{range}")]
+        public async Task<IActionResult> SplitPdfByRange(string range)
         {
             _logger.Information("SplitPdfByRange started");
             IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
@@ -223,8 +234,8 @@ namespace pdf_editor_api.Controllers
         /// <param name="range"></param>
         /// <returns>New Pdf with custom range</returns>
         [HttpPost]
-        [Route("SplitPDF/CustomRange")]
-        public async Task<IActionResult> SplitPDFByCustomRange([FromForm] string range)
+        [Route("Split/CustomRange/{range}")]
+        public async Task<IActionResult> SplitPdfByCustomRange(string range)
         {
             _logger.Information("SplitPdf/CustomerRange started");
             IFormFile formFile = HttpContext.Request.Form?.Files.FirstOrDefault();
