@@ -19,11 +19,18 @@ using System.Threading.Tasks;
 
 namespace pdf_editor_api.Service
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PDFEditorService
     {
         private static string[] _imagesExtensions = { ".jpg", ".png", ".gif", ".tiff", ".bpm" };
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logger"></param>
         public PDFEditorService(ILogger logger)
         {
             _logger = logger;

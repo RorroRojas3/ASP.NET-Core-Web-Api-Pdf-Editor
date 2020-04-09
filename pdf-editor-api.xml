@@ -62,6 +62,17 @@
             <param name="range"></param>
             <returns>New Pdf with custom range</returns>
         </member>
+        <member name="T:pdf_editor_api.Service.PDFEditorService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.#ctor(Serilog.ILogger)">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+        </member>
         <member name="M:pdf_editor_api.Service.PDFEditorService.ConvertImagesToPDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
             <summary>
                 Converts Image(s) to PDF document
@@ -116,11 +127,64 @@
             <param name="file"></param>
             <returns></returns>
         </member>
-        <member name="M:pdf_editor_api.Startup.RegisterSwashbuckle(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="T:pdf_editor_api.Startup">
             <summary>
-                Register Swashbuckle UI
+                Startup.cs class
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+                Startup Controller with DI
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:pdf_editor_api.Startup.Configuration">
+            <summary>
+                Contains configuration from appsettins.json file
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
             </summary>
             <param name="services"></param>
+        </member>
+        <member name="M:pdf_editor_api.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+            
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+            <param name="provider"></param>
+        </member>
+        <member name="M:pdf_editor_api.Startup.ServiceLogging(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                Register Logging IServiceCollection
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:pdf_editor_api.Startup.ServiceSwashbuckle(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                Register Swashbuckle IServiceCollection
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:pdf_editor_api.Utility.Swashbuckle.ConfigureSwaggerOptions">
+            <summary>
+                ConfigureSwaggerOptions class
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Utility.Swashbuckle.ConfigureSwaggerOptions.#ctor(Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+                ConfigureSwaggerOptions constructor with DI
+            </summary>
+            <param name="provider"></param>
+        </member>
+        <member name="M:pdf_editor_api.Utility.Swashbuckle.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+                Adds Swagger documentation based on version
+            </summary>
+            <param name="options"></param>
         </member>
     </members>
 </doc>

@@ -9,52 +9,76 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using pdf_editor_api.Service;
+using pdf_editor_api.Utility.Swashbuckle;
 using Serilog;
 using Serilog.Events;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace pdf_editor_api
 {
+    /// <summary>
+    ///     Startup.cs class
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        ///     Startup Controller with DI
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        ///     Contains configuration from appsettins.json file
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        private const string _defaultCorsPolicy = "CorsPolicy";
+
+        #region IServiceCollection Configuration
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Logger = new LoggerConfiguration()
-                        .WriteTo.Console()
-                        .WriteTo.File(@"D:\home\LogFiles\AppLog.log", rollingInterval: RollingInterval.Day)
-                        .WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces, LogEventLevel.Information)
-                        .CreateLogger();
+            ServiceLogging(services);
 
+            Log.Information($"Registering Controllers");
             services.AddControllers().AddNewtonsoftJson();
-            services.AddMvc();
-            services.AddCors(x => x.AddPolicy("CORSPolicy",
-                options => {
-                    options.AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader()
-                ;}));
+
+            Log.Information($"Registering Swashbuckle");
+            ServiceSwashbuckle(services);
+
+            Log.Information($"Registering CORS policy");
+            ServiceCors(services);
+
+            Log.Information($"Registering Dependency Injection");
             services.AddSingleton<PDFEditorService>();
+
+            Log.Information($"Registering Application Insights");
             services.AddApplicationInsightsTelemetry();
-            services.AddSingleton(Log.Logger);
-
-            RegisterSwashbuckle(services);
         }
+        #endregion
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        #region IApplicationBuilder Configuration
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <param name="provider"></param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -67,38 +91,94 @@ namespace pdf_editor_api
 
             app.UseAuthorization();
 
-            app.UseCors("CORSPolicy");
+            app.UseCors(_defaultCorsPolicy);
 
             app.UseStaticFiles();
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pdf Editor V1");
-                c.RoutePrefix = string.Empty;
-            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-        }
 
+            ApplicationSwashbuckle(app, provider);
+        }
+        #endregion
+
+        #region Register Swasbuckle Application Builder
+        private void ApplicationSwashbuckle(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint(
+                            $"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                    }
+
+                    options.RoutePrefix = string.Empty;
+                });
+        }
+        #endregion
+
+        #region Register Logging Service Collection
         /// <summary>
-        ///     Register Swashbuckle UI
+        ///     Register Logging IServiceCollection
         /// </summary>
         /// <param name="services"></param>
-        private void RegisterSwashbuckle(IServiceCollection services)
+        private void ServiceLogging(IServiceCollection services)
         {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Pdf Editor", Version = "v1" });
+            var logger = new LoggerConfiguration()
+                            .WriteTo.Console(LogEventLevel.Information)
+                            .WriteTo.File(@"D:\home\LogFiles\AppLog.log", rollingInterval: RollingInterval.Day)
+                            .WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces, LogEventLevel.Information)
+                            .CreateLogger();
+            services.AddSingleton(logger);
 
+            Log.Logger = new LoggerConfiguration()
+                        .WriteTo.Console(LogEventLevel.Information)
+                        .WriteTo.File(@"D:\home\LogFiles\AppLog.log", rollingInterval: RollingInterval.Day)
+                        .WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces, LogEventLevel.Information)
+                        .CreateLogger();
+            services.AddSingleton(Log.Logger);
+        }
+        #endregion
+
+        #region Register Swashbuckle Service Collection
+        /// <summary>
+        ///     Register Swashbuckle IServiceCollection
+        /// </summary>
+        /// <param name="services"></param>
+        private void ServiceSwashbuckle(IServiceCollection services)
+        {
+            services.AddMvc();
+            services.AddApiVersioning();
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen(x =>
+            {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                x.IncludeXmlComments(xmlPath);
             });
         }
+        #endregion
+
+        #region Register CORS Service Collection
+        private void ServiceCors(IServiceCollection services)
+        {
+            services.AddCors(x => x.AddPolicy(_defaultCorsPolicy,
+                options => {
+                    options.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                ;
+                }));
+        }
+        #endregion
+
+
     }
 }

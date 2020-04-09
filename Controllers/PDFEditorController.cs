@@ -14,8 +14,9 @@ namespace pdf_editor_api.Controllers
     /// 
     /// </summary>
     [ApiController]
-    [Route("api/Pdf/")]
-    public class PDFEditorController : Controller
+    [Route("api/v{version:apiVersion}/Pdf")]
+    [ApiVersion("1")]
+    public class PDFEditorController : ControllerBase
     {
         /// <summary>
         ///     Private variables 
