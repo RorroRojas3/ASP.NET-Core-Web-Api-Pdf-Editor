@@ -132,14 +132,14 @@ namespace pdf_editor_api
         {
             var logger = new LoggerConfiguration()
                             .WriteTo.Console(LogEventLevel.Information)
-                            .ReadFrom.Configuration(Configuration.GetSection("Serilog"))
+                            .ReadFrom.Configuration(Configuration)
                             .WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces, LogEventLevel.Information)
                             .CreateLogger();
             services.AddSingleton(logger);
 
             Log.Logger = new LoggerConfiguration()
                         .WriteTo.Console(LogEventLevel.Information)
-                        .ReadFrom.Configuration(Configuration.GetSection("Serilog"))
+                        .ReadFrom.Configuration(Configuration)
                         .WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault(), TelemetryConverter.Traces, LogEventLevel.Information)
                         .CreateLogger();
             services.AddSingleton(Log.Logger);
