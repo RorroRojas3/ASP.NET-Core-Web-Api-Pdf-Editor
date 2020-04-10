@@ -7,8 +7,18 @@ using System.Threading.Tasks;
 
 namespace pdf_editor_api.Responses
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class StandardResponse<T> 
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="httpStatusCode"></param>
+        /// <param name="message"></param>
+        /// <param name="data"></param>
         public StandardResponse(HttpStatusCode httpStatusCode, string message, List<T> data)
         {
             this.HttpStatusCode = httpStatusCode;
@@ -16,11 +26,22 @@ namespace pdf_editor_api.Responses
             this.Data = data;
         }
         
-
+        /// <summary>
+        /// 
+        /// </summary>
         public HttpStatusCode HttpStatusCode { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public List<T> Data { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IActionResult Result
         {
             get

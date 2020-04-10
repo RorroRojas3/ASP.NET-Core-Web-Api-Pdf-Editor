@@ -11,13 +11,25 @@ using Serilog;
 
 namespace pdf_editor_api
 {
+    /// <summary>
+    ///     Program.cs
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        ///     Main function of Program.cs
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
 
+        /// <summary>
+        ///     CreatHostBuilder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -26,7 +38,8 @@ namespace pdf_editor_api
                 })
                 .ConfigureAppConfiguration(configBuilder =>
                 {
-                    configBuilder.AddJsonFile("appsettings.json");
+                    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                    configBuilder.AddJsonFile($"appsettings.{environment}.json");
                 })
                 .UseSerilog();
                 

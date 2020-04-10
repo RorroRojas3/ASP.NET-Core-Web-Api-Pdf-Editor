@@ -14,7 +14,7 @@
                 Private variables 
             </summary>
         </member>
-        <member name="M:pdf_editor_api.Controllers.PDFEditorController.#ctor(pdf_editor_api.Service.PDFEditorService,Serilog.ILogger)">
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.#ctor(pdf_editor_api.Service.PDFEditorService,Microsoft.Extensions.Logging.ILogger{pdf_editor_api.Controllers.PDFEditorController})">
             <summary>
                 Constructor for PdfEditorController with DI
             </summary>
@@ -39,6 +39,7 @@
             <summary>
                 Removes pages from PDF
             </summary>
+            <param name="file"></param>
             <param name="pages"></param>
             <returns>PDF with removed pages</returns>
         </member>
@@ -53,6 +54,7 @@
                 Splits PDF by fixed range
             </summary>
             <param name="range"></param>
+            <param name="file"></param>
             <returns></returns>
         </member>
         <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByCustomRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
@@ -62,12 +64,64 @@
             <param name="range"></param>
             <returns>New Pdf with custom range</returns>
         </member>
+        <member name="T:pdf_editor_api.Program">
+            <summary>
+                Program.cs
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Program.Main(System.String[])">
+            <summary>
+                Main function of Program.cs
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:pdf_editor_api.Program.CreateHostBuilder(System.String[])">
+            <summary>
+                CreatHostBuilder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:pdf_editor_api.Responses.StandardResponse`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:pdf_editor_api.Responses.StandardResponse`1.#ctor(System.Net.HttpStatusCode,System.String,System.Collections.Generic.List{`0})">
+            <summary>
+            
+            </summary>
+            <param name="httpStatusCode"></param>
+            <param name="message"></param>
+            <param name="data"></param>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.HttpStatusCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.Message">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.Data">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.Result">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:pdf_editor_api.Service.PDFEditorService">
             <summary>
             
             </summary>
         </member>
-        <member name="M:pdf_editor_api.Service.PDFEditorService.#ctor(Serilog.ILogger)">
+        <member name="M:pdf_editor_api.Service.PDFEditorService.#ctor(Microsoft.Extensions.Logging.ILogger{pdf_editor_api.Service.PDFEditorService})">
             <summary>
             
             </summary>
