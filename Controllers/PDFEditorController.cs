@@ -14,7 +14,7 @@ namespace pdf_editor_api.Controllers
     /// 
     /// </summary>
     [ApiController]
-    [Route("api/v{version:apiVersion}/Pdf")]
+    [Route("api/v{version:apiVersion}")]
     [ApiVersion("1")]
     public class PDFEditorController : ControllerBase
     {
@@ -41,7 +41,7 @@ namespace pdf_editor_api.Controllers
         /// </summary>
         /// <returns>Returns PDF file with converted images</returns>
         [HttpPost]
-        [Route("ImagesToPdf")]
+        [Route("Image/Pdf")]
         public async Task<IActionResult> ImagesToPDF(IFormFileCollection files)
         {
             try
@@ -81,7 +81,7 @@ namespace pdf_editor_api.Controllers
         /// <param name="imageFormat"></param>
         /// <returns>ZIP File</returns>
         [HttpPost]
-        [Route("PdfToImages/{imageFormat}")]
+        [Route("Pdf/Image/{imageFormat}")]
         public async Task<IActionResult> PdfToImages(IFormFile formFile, string imageFormat)
         {         
             try
@@ -120,7 +120,7 @@ namespace pdf_editor_api.Controllers
         /// <param name="pages"></param>
         /// <returns>PDF with removed pages</returns>
         [HttpPost]
-        [Route("RemovePages/{pages}")]
+        [Route("Pdf/RemovePages/{pages}")]
         public async Task<IActionResult> RemovePages(IFormFile file, string pages)
         {
             try
@@ -168,7 +168,7 @@ namespace pdf_editor_api.Controllers
         /// </summary>
         /// <returns>Merge PDF file</returns>
         [HttpPost]
-        [Route("Merge")]
+        [Route("Pdf/Merge")]
         public async Task<IActionResult> MergePDF(IFormFileCollection files)
         {
             try
@@ -200,7 +200,7 @@ namespace pdf_editor_api.Controllers
         /// <param name="range"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("Split/FixRange/{range}")]
+        [Route("Pdf/Split/Range/Fix/{range}")]
         public async Task<IActionResult> SplitPdfByRange(string range, IFormFile file)
         {
             try
@@ -239,7 +239,7 @@ namespace pdf_editor_api.Controllers
         /// <param name="range"></param>
         /// <returns>New Pdf with custom range</returns>
         [HttpPost]
-        [Route("Split/CustomRange/{range}")]
+        [Route("Pdf/Split/Range/Custom/{range}")]
         public async Task<IActionResult> SplitPdfByCustomRange(IFormFile file, string range)
         {
             try
