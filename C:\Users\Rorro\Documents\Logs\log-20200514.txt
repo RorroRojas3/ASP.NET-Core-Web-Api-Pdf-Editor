@@ -1,0 +1,35 @@
+2020-05-14 22:14:16.060 -04:00 [Information] [] [] Registering Controllers
+2020-05-14 22:14:16.122 -04:00 [Information] [] [] Registering Swashbuckle
+2020-05-14 22:14:16.138 -04:00 [Information] [] [] Registering CORS policy
+2020-05-14 22:14:16.139 -04:00 [Information] [] [] Registering Dependency Injection
+2020-05-14 22:14:16.139 -04:00 [Information] [] [] Registering Application Insights
+2020-05-14 22:14:16.184 -04:00 [Information] [Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager] [] User profile is available. Using '"/home/rorro/.aspnet/DataProtection-Keys"' as key repository; keys will not be encrypted at rest.
+2020-05-14 22:14:16.213 -04:00 [Information] [Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager] [{ Id: 58 }] Creating key {0347304e-54da-4557-bb76-31e15feb1612} with creation date 2020-05-15 02:14:16Z, activation date 2020-05-15 02:14:16Z, and expiration date 2020-08-13 02:14:16Z.
+2020-05-14 22:14:16.223 -04:00 [Warning] [Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager] [{ Id: 35 }] No XML encryptor configured. Key {0347304e-54da-4557-bb76-31e15feb1612} may be persisted to storage in unencrypted form.
+2020-05-14 22:14:16.226 -04:00 [Information] [Microsoft.AspNetCore.DataProtection.Repositories.FileSystemXmlRepository] [{ Id: 39 }] Writing data to file '"/home/rorro/.aspnet/DataProtection-Keys/key-0347304e-54da-4557-bb76-31e15feb1612.xml"'.
+2020-05-14 22:14:16.518 -04:00 [Warning] [Microsoft.AspNetCore.Server.Kestrel] [] Unable to bind to "https://localhost:5001" on the "IPv6 loopback" interface: '"Cannot assign requested address"'.
+2020-05-14 22:14:16.518 -04:00 [Warning] [Microsoft.AspNetCore.Server.Kestrel] [] Unable to bind to "http://localhost:5000" on the "IPv6 loopback" interface: '"Cannot assign requested address"'.
+2020-05-14 22:14:16.518 -04:00 [Information] [Microsoft.Hosting.Lifetime] [] Now listening on: "https://localhost:5001"
+2020-05-14 22:14:16.519 -04:00 [Information] [Microsoft.Hosting.Lifetime] [] Now listening on: "http://localhost:5000"
+2020-05-14 22:14:16.519 -04:00 [Information] [Microsoft.Hosting.Lifetime] [] Application started. Press Ctrl+C to shut down.
+2020-05-14 22:14:16.519 -04:00 [Information] [Microsoft.Hosting.Lifetime] [] Hosting environment: "Development"
+2020-05-14 22:14:16.519 -04:00 [Information] [Microsoft.Hosting.Lifetime] [] Content root path: "/home/rorro/Documents/GitHub/pdf-editor-api"
+2020-05-14 22:14:28.512 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/  
+2020-05-14 22:14:28.562 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 55.1079ms 301 
+2020-05-14 22:14:28.570 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/index.html  
+2020-05-14 22:14:28.601 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 31.514ms 200 text/html;charset=utf-8
+2020-05-14 22:14:28.634 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/swagger-ui.css  
+2020-05-14 22:14:28.634 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/swagger-ui-standalone-preset.js  
+2020-05-14 22:14:28.634 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/swagger-ui-bundle.js  
+2020-05-14 22:14:28.653 -04:00 [Information] [Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware] [{ Id: 2, Name: "FileServed" }] Sending file. Request path: '"/swagger-ui-standalone-preset.js"'. Physical path: '"N/A"'
+2020-05-14 22:14:28.656 -04:00 [Information] [Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware] [{ Id: 2, Name: "FileServed" }] Sending file. Request path: '"/swagger-ui.css"'. Physical path: '"N/A"'
+2020-05-14 22:14:28.656 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 21.362ms 200 application/javascript
+2020-05-14 22:14:28.656 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 21.9679ms 200 text/css
+2020-05-14 22:14:28.660 -04:00 [Information] [Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware] [{ Id: 2, Name: "FileServed" }] Sending file. Request path: '"/swagger-ui-bundle.js"'. Physical path: '"N/A"'
+2020-05-14 22:14:28.661 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 26.2001ms 200 application/javascript
+2020-05-14 22:14:28.902 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/favicon-16x16.png  
+2020-05-14 22:14:28.906 -04:00 [Information] [Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware] [{ Id: 2, Name: "FileServed" }] Sending file. Request path: '"/favicon-16x16.png"'. Physical path: '"N/A"'
+2020-05-14 22:14:28.909 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 7.5671ms 200 image/png
+2020-05-14 22:14:28.976 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 1 }] Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json  
+2020-05-14 22:14:29.083 -04:00 [Information] [Microsoft.AspNetCore.Hosting.Diagnostics] [{ Id: 2 }] Request finished in 107.9675ms 200 application/json;charset=utf-8
+2020-05-14 22:14:32.306 -04:00 [Information] [Microsoft.Hosting.Lifetime] [] Application is shutting down...

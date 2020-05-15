@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>pdf-editor-api</name>
+    </assembly>
+    <members>
+        <member name="T:pdf_editor_api.Controllers.PDFEditorController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:pdf_editor_api.Controllers.PDFEditorController._pdfEditorService">
+            <summary>
+                Private variables 
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.#ctor(pdf_editor_api.Service.PDFEditorService,Microsoft.Extensions.Logging.ILogger{pdf_editor_api.Controllers.PDFEditorController})">
+            <summary>
+                Constructor for PdfEditorController with DI
+            </summary>
+            <param name="pdfEditorService"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.ImagesToPDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+                Converts Image(s) to a single PDF file
+            </summary>
+            <returns>Returns PDF file with converted images</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.PdfToImages(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Converts PDF to Images and compresses them into a ZIP file
+            </summary>
+            <param name="formFile"></param>
+            <param name="imageFormat"></param>
+            <returns>ZIP File</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.RemovePages(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Removes pages from PDF
+            </summary>
+            <param name="file"></param>
+            <param name="pages"></param>
+            <returns>PDF with removed pages</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.MergePDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+                Merged PDF
+            </summary>
+            <returns>Merge PDF file</returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByRange(System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+                Splits PDF by fixed range
+            </summary>
+            <param name="range"></param>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="M:pdf_editor_api.Controllers.PDFEditorController.SplitPdfByCustomRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Splits Pdf into custom range sent
+            </summary>
+            <param name="range"></param>
+            <returns>New Pdf with custom range</returns>
+        </member>
+        <member name="T:pdf_editor_api.Program">
+            <summary>
+                Program.cs
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Program.Main(System.String[])">
+            <summary>
+                Main function of Program.cs
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:pdf_editor_api.Program.CreateHostBuilder(System.String[])">
+            <summary>
+                CreatHostBuilder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:pdf_editor_api.Responses.StandardResponse`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:pdf_editor_api.Responses.StandardResponse`1.#ctor(System.Net.HttpStatusCode,System.String,System.Collections.Generic.List{`0})">
+            <summary>
+            
+            </summary>
+            <param name="httpStatusCode"></param>
+            <param name="message"></param>
+            <param name="data"></param>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.HttpStatusCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.Message">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.Data">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:pdf_editor_api.Responses.StandardResponse`1.Result">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:pdf_editor_api.Service.PDFEditorService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.#ctor(Microsoft.Extensions.Logging.ILogger{pdf_editor_api.Service.PDFEditorService})">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.ConvertImagesToPDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+                Converts Image(s) to PDF document
+            </summary>
+            <param name="formFiles"></param>
+            <returns>PDF document stream</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.PDFToImages(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Converts PDF to Images and compresses them into a ZIP file
+            </summary>
+            <param name="formFile"></param>
+            <param name="imageFormat"></param>
+            <returns>Array of bytes of ZIP file</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.RemovePagesFromPDF(Microsoft.AspNetCore.Http.IFormFile,System.Collections.Generic.List{System.Int32})">
+            <summary>
+                Removes pages from PDF
+            </summary>
+            <returns>Stream with wanted PDF content</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.MergePDF(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+                Goes through each PDF and extracts all pages from it
+                and puts it into a single PDF document
+            </summary>
+            <param name="formFiles"></param>
+            <returns>Merge PDF stream</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.SplitPDFByRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Splits PDF in fixed ranges.
+                If there are remaining pages based on the fixed split
+                they will be stored in last PDF file on ZIP
+            </summary>
+            <param name="formFile"></param>
+            <param name="range"></param>
+            <returns>Byte array with ZIP file containing PDFs</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.SplitPDFByCustomRange(Microsoft.AspNetCore.Http.IFormFile,System.String)">
+            <summary>
+                Splits PDF and creates new PDF with selected range
+            </summary>
+            <param name="formFile"></param>
+            <param name="range"></param>
+            <returns>Stream of selected pages of Pdf</returns>
+        </member>
+        <member name="M:pdf_editor_api.Service.PDFEditorService.IsFileAnImage(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+                Determines if file is an image
+            </summary>
+            <param name="file"></param>
+            <returns></returns>
+        </member>
+        <member name="T:pdf_editor_api.Startup">
+            <summary>
+                Startup.cs class
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+                Startup Controller with DI
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:pdf_editor_api.Startup.Configuration">
+            <summary>
+                Contains configuration from appsettins.json file
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:pdf_editor_api.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+            
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+            <param name="provider"></param>
+        </member>
+        <member name="M:pdf_editor_api.Startup.ServiceLogging(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                Register Logging IServiceCollection
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:pdf_editor_api.Startup.ServiceSwashbuckle(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+                Register Swashbuckle IServiceCollection
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:pdf_editor_api.Utility.Swashbuckle.ConfigureSwaggerOptions">
+            <summary>
+                ConfigureSwaggerOptions class
+            </summary>
+        </member>
+        <member name="M:pdf_editor_api.Utility.Swashbuckle.ConfigureSwaggerOptions.#ctor(Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+                ConfigureSwaggerOptions constructor with DI
+            </summary>
+            <param name="provider"></param>
+        </member>
+        <member name="M:pdf_editor_api.Utility.Swashbuckle.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+                Adds Swagger documentation based on version
+            </summary>
+            <param name="options"></param>
+        </member>
+    </members>
+</doc>
